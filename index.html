@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full bg-black select-none">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>VIP BLACK CARD - 專屬黑卡</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts - Outfit & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rosegold: {
+              DEFAULT: '#E5C19C',
+              light: '#F5D7B8',
+              dark: '#C89F78',
+              glow: 'rgba(229, 193, 156, 0.25)'
+            },
+            dark: {
+              bg: '#0F0F12',
+              card: '#16161C',
+              surface: '#1F1F28',
+              border: 'rgba(229, 193, 156, 0.15)'
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'Outfit', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #050507;
+      color: #E2E2E8;
+      font-family: 'Noto Sans TC', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .black-card-bg {
+      background: linear-gradient(135deg, #2B2929 0%, #171618 45%, #0B0A0C 100%);
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15);
+    }
+    
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF0DC 0%, #E5C19C 50%, #C39972 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gold-border {
+      border: 1px solid rgba(229, 193, 156, 0.2);
+    }
+
+    @keyframes lockPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(229, 193, 156, 0.25);
+      }
+      50% {
+        box-shadow: 0 0 0 20px rgba(229, 193, 156, 0);
+      }
+    }
+
+    .lock-pulse {
+      animation: lockPulse 2.5s infinite;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
+  </style>
+</head>
+<body class="h-full flex items-center justify-center p-0 md:p-4 overflow-hidden">
+
+  <div id="appContainer" class="relative w-full max-w-md h-full md:h-[844px] bg-dark-bg md:rounded-[48px] overflow-hidden shadow-2xl border border-white/10 flex flex-col justify-between">
+
+    <!-- ==================== LOCK SCREEN VIEW ==================== -->
+    <div id="lockScreen" class="absolute inset-0 z-50 bg-dark-bg flex flex-col items-center justify-between p-8 transition-all duration-700 ease-in-out opacity-100 scale-100">
+      
+      <div class="w-full text-center pt-12">
+        <p id="greetingTime" class="tracking-[0.3em] text-rosegold-light/70 text-xs font-outfit uppercase">GOOD NIGHT</p>
+      </div>
+
+      <div class="flex flex-col items-center justify-center -mt-10">
+        <button id="unlockBtn" onclick="unlockApp()" class="w-32 h-32 rounded-full border border-rosegold/30 bg-gradient-to-b from-dark-surface to-dark-card flex items-center justify-center lock-pulse group hover:border-rosegold active:scale-95 transition-all duration-300">
+          <div class="w-24 h-24 rounded-full border border-rosegold/20 bg-dark-bg flex items-center justify-center">
+            <i class="fa-solid fa-lock text-3xl text-rosegold group-hover:scale-110 transition-transform"></i>
+          </div>
+        </button>
+        
+        <h1 class="text-2xl font-semibold text-white tracking-wide mt-10 mb-2">Hi, <span class="userNameText">Huang Hau</span></h1>
+        <p class="text-rosegold/70 text-sm tracking-wider font-light">輕觸解鎖你的專屬黑卡</p>
+      </div>
+
+      <div class="pb-6 text-center">
+        <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-4"></div>
+        <p class="text-[10px] text-white/30 tracking-widest uppercase">BLACK CARD PRIVATE BANKING</p>
+      </div>
+    </div>
+
+    <!-- ==================== MAIN DASHBOARD VIEW ==================== -->
+    <div id="mainDashboard" class="w-full h-full flex flex-col justify-between overflow-y-auto pb-20 transition-all duration-500 opacity-0 transform translate-y-4">
+      
+      <div class="px-6 pt-10 pb-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <p id="dashboardGreeting" class="tracking-[0.25em] text-rosegold/70 text-[11px] font-outfit uppercase font-medium">GOOD NIGHT</p>
+            <h2 class="text-2xl font-bold text-white tracking-tight mt-0.5">Hi, <span class="userNameText">Huang Hau</span></h2>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="openModal('profile')" class="w-10 h-10 rounded-full bg-dark-surface border border-white/10 flex items-center justify-center text-rosegold/80 active:scale-95 transition">
+              <i class="fa-solid fa-user-gear text-sm"></i>
+            </button>
+            <button onclick="lockApp()" class="w-10 h-10 rounded-full bg-dark-surface border border-white/10 flex items-center justify-center text-rosegold/80 active:scale-95 transition">
+              <i class="fa-solid fa-lock text-sm"></i>
+            </button>
+          </div>
+        </div>
+        <p class="text-xs text-white/50 tracking-wide">感謝你選擇專屬於你的專屬黑卡</p>
+      </div>
+
+      <div class="px-5 space-y-5 flex-1">
+        
+        <!-- Black Card Display -->
+        <div class="relative w-full aspect-[1.58/1] rounded-2xl black-card-bg gold-border p-6 flex flex-col justify-between overflow-hidden shadow-2xl group cursor-pointer" onclick="toggleCardInfo()">
+          <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#E5C19C_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full bg-rosegold/5 blur-2xl"></div>
+
+          <div class="flex justify-between items-start z-10">
+            <div class="flex items-center gap-2">
+              <span class="font-outfit text-2xl font-light tracking-tighter gold-gradient-text italic font-serif">35</span>
+              <svg class="w-4 h-4 text-rosegold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21a9 9 0 0 0 9-9 9 9 0 0 0-9-9" />
+                <path d="M12 17a5 5 0 0 0 5-5 5 5 5 0 0 0-5-5" />
+              </svg>
+            </div>
+            <i class="fa-solid fa-wifi text-rosegold/60 rotate-90 text-sm"></i>
+          </div>
+
+          <div class="z-10 my-auto">
+            <p class="text-[10px] tracking-[0.3em] text-white/40 uppercase mb-1">PRIVILEGE MEMBER</p>
+            <p class="font-outfit text-sm tracking-[0.2em] text-rosegold-light/90 uppercase" id="cardNumberDisplay">1991 1011 1998 0520</p>
+          </div>
+
+          <div class="flex justify-between items-end z-10">
+            <div>
+              <p class="text-[9px] text-white/40 tracking-wider uppercase">CARD HOLDER</p>
+              <p class="font-outfit text-base tracking-[0.2em] font-medium text-white uppercase userNameText">Huang Hau</p>
+            </div>
+            <span class="font-outfit text-4xl font-semibold gold-gradient-text leading-none">H</span>
+          </div>
+        </div>
+
+        <div class="flex justify-center gap-1.5 py-1">
+          <div class="w-4 h-1.5 bg-rosegold rounded-full"></div>
+          <div class="w-1.5 h-1.5 bg-white/20 rounded-full"></div>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="bg-dark-card border border-white/5 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs text-white/50 tracking-wider">可用餘額</span>
+              <button onclick="toggleBalanceVisibility()" class="text-white/40 hover:text-rosegold transition">
+                <i id="eyeIcon" class="fa-regular fa-eye text-xs"></i>
+              </button>
+            </div>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xs font-outfit text-rosegold font-semibold">NT$</span>
+              <span id="balanceAmount" class="font-outfit text-2xl font-bold text-white tracking-tight">1,314</span>
+            </div>
+          </div>
+
+          <button onclick="openModal('perks')" class="bg-dark-surface hover:bg-white/10 gold-border rounded-xl p-3 flex flex-col items-center justify-center gap-1 min-w-[80px] active:scale-95 transition">
+            <div class="w-7 h-7 rounded-full bg-rosegold/10 flex items-center justify-center">
+              <i class="fa-solid fa-award text-rosegold text-xs"></i>
+            </div>
+            <span class="text-[10px] text-rosegold-light tracking-wider font-medium">專屬權益</span>
+          </button>
+        </div>
+
+        <!-- Quick Redeem List -->
+        <div class="bg-dark-card border border-white/5 rounded-2xl p-4">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-xs font-medium text-white/80 tracking-wider">經常兌換</span>
+            <button onclick="switchTab('shop')" class="text-[11px] text-rosegold/70 hover:text-rosegold flex items-center gap-1">
+              <span>查看全部</span>
+              <i class="fa-solid fa-chevron-right text-[9px]"></i>
+            </button>
+          </div>
+
+          <div id="quickRedeemContainer" class="grid grid-cols-5 gap-2 text-center">
+            <!-- Dynamic icons rendered from updated list -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: SHOP / STORE ==================== -->
+    <div id="shopView" class="hidden w-full h-full flex-col justify-between overflow-y-auto px-5 pt-12 pb-24">
+      <div>
+        <h2 class="text-xl font-bold text-white mb-1">黑卡尊榮商城</h2>
+        <p class="text-xs text-white/50 mb-4">使用專屬點數兌換你的各項專屬服務</p>
+
+        <div id="shopItemList" class="space-y-3">
+          <!-- Items generated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: HISTORY / LEDGER ==================== -->
+    <div id="historyView" class="hidden w-full h-full flex-col overflow-y-auto px-5 pt-12 pb-24">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-xl font-bold text-white">交易與消費明細</h2>
+          <p class="text-xs text-white/50">即時記錄所有存款與兌換紀錄</p>
+        </div>
+        <button onclick="openModal('deposit')" class="px-3 py-1.5 bg-rosegold/20 text-rosegold border border-rosegold/30 rounded-lg text-xs font-medium hover:bg-rosegold hover:text-dark-bg transition">
+          + 新增存款
+        </button>
+      </div>
+
+      <div id="historyList" class="space-y-2.5">
+        <!-- History rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: CARD SETTINGS ==================== -->
+    <div id="cardSettingsView" class="hidden w-full h-full flex-col overflow-y-auto px-5 pt-12 pb-24">
+      <h2 class="text-xl font-bold text-white mb-1">黑卡管理與個人化</h2>
+      <p class="text-xs text-white/50 mb-6">自訂你的專屬卡片尊榮資訊</p>
+
+      <div class="bg-dark-card rounded-2xl p-4 gold-border space-y-4">
+        <div>
+          <label class="block text-xs text-white/60 mb-1">尊榮持卡人姓名</label>
+          <input type="text" id="inputUserName" value="Huang Hau" class="w-full bg-dark-surface border border-white/10 rounded-xl p-3 text-sm text-white focus:border-rosegold outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs text-white/60 mb-1">目前黑卡餘額 (NT$)</label>
+          <input type="number" id="inputBalance" value="1314" class="w-full bg-dark-surface border border-white/10 rounded-xl p-3 text-sm text-white focus:border-rosegold outline-none">
+        </div>
+
+        <button onclick="saveCardSettings()" class="w-full bg-gradient-to-r from-rosegold-dark via-rosegold to-rosegold-light text-dark-bg font-semibold py-3 rounded-xl text-sm shadow-lg active:scale-95 transition">
+          儲存設定
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="absolute bottom-0 inset-x-0 bg-dark-bg/95 backdrop-blur-md border-t border-white/10 px-6 py-3 flex justify-between items-center z-40">
+      <button onclick="switchTab('home')" id="tab-home" class="flex flex-col items-center gap-1 text-rosegold transition">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-medium tracking-wider">首頁</span>
+      </button>
+
+      <button onclick="switchTab('shop')" id="tab-shop" class="flex flex-col items-center gap-1 text-white/40 hover:text-rosegold transition">
+        <i class="fa-solid fa-gift text-lg"></i>
+        <span class="text-[10px] font-medium tracking-wider">兌換</span>
+      </button>
+
+      <button onclick="switchTab('history')" id="tab-history" class="flex flex-col items-center gap-1 text-white/40 hover:text-rosegold transition">
+        <i class="fa-solid fa-receipt text-lg"></i>
+        <span class="text-[10px] font-medium tracking-wider">紀錄</span>
+      </button>
+
+      <button onclick="switchTab('cardSettings')" id="tab-cardSettings" class="flex flex-col items-center gap-1 text-white/40 hover:text-rosegold transition">
+        <i class="fa-solid fa-credit-card text-lg"></i>
+        <span class="text-[10px] font-medium tracking-wider">卡片</span>
+      </button>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
+      
+      <!-- Perks Modal -->
+      <div id="perksModal" class="hidden bg-dark-card gold-border rounded-3xl p-6 w-full max-w-sm text-center relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/40 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="w-12 h-12 rounded-full bg-rosegold/10 border border-rosegold/30 text-rosegold flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-crown text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-1">黑卡專屬權益</h3>
+        <p class="text-xs text-rosegold mb-4">VVIP PRIVILEGES</p>
+        
+        <div class="text-left text-xs text-white/70 space-y-2.5 bg-dark-surface p-4 rounded-xl border border-white/5 mb-5">
+          <p class="flex items-center gap-2"><i class="fa-solid fa-check text-rosegold"></i> 無條件無理由抱抱與安慰權</p>
+          <p class="flex items-center gap-2"><i class="fa-solid fa-check text-rosegold"></i> 生氣免死金牌 (每月限一次)</p>
+          <p class="flex items-center gap-2"><i class="fa-solid fa-check text-rosegold"></i> 遊戲陪玩服務</p>
+          <p class="flex items-center gap-2"><i class="fa-solid fa-check text-rosegold"></i> 隨call隨接專屬服務</p>
+        </div>
+
+        <button onclick="closeModal()" class="w-full bg-rosegold text-dark-bg font-semibold py-2.5 rounded-xl text-xs">
+          我知道了，享受權益
+        </button>
+      </div>
+
+      <!-- Deposit Modal -->
+      <div id="depositModal" class="hidden bg-dark-card gold-border rounded-3xl p-6 w-full max-w-sm relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/40 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <h3 class="text-lg font-bold text-white mb-1">新增獎勵存款</h3>
+        <p class="text-xs text-white/50 mb-4">表現優良，為持卡人增加存款</p>
+
+        <div class="space-y-3 mb-5">
+          <div>
+            <label class="block text-xs text-white/60 mb-1">存款項目描述</label>
+            <input type="text" id="depositDesc" placeholder="例如：貼心表現、主動分擔" class="w-full bg-dark-surface border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-rosegold">
+          </div>
+          <div>
+            <label class="block text-xs text-white/60 mb-1">存款金額 (NT$)</label>
+            <input type="number" id="depositAmount" placeholder="500" class="w-full bg-dark-surface border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-rosegold">
+          </div>
+        </div>
+
+        <button onclick="confirmDeposit()" class="w-full bg-rosegold text-dark-bg font-semibold py-2.5 rounded-xl text-xs">
+          確認存入
+        </button>
+      </div>
+
+      <!-- Profile Modal -->
+      <div id="profileModal" class="hidden bg-dark-card gold-border rounded-3xl p-6 w-full max-w-sm relative text-center">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/40 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="w-16 h-16 rounded-full bg-rosegold/20 border border-rosegold flex items-center justify-center text-rosegold text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-0.5 userNameText">Huang Hau</h3>
+        <p class="text-xs text-rosegold tracking-wider mb-4">黑卡首席VIP用戶</p>
+
+        <p class="text-xs text-white/60 bg-dark-surface p-3 rounded-xl mb-4">
+          「這張卡代表對你無限的寵愛與承諾，隨時隨地都可以提領優惠！」
+        </p>
+
+        <button onclick="closeModal()" class="w-full bg-white/10 text-white font-medium py-2 rounded-xl text-xs">
+          開啟尊榮黑卡
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-rosegold text-dark-bg px-5 py-2.5 rounded-full font-medium text-xs shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center gap-2">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">兌換成功！</span>
+    </div>
+
+  </div>
+
+  <script>
+    // Updated App State based on user instructions
+    let state = {
+      userName: 'Huang Hau',
+      balance: 1314,
+      isHideBalance: false,
+      history: [], // Completely cleared history
+      shopItems: [
+        { name: '下班晚餐兌換券', cost: 200, icon: 'utensils', desc: '享受美味下班晚餐時光' },
+        { name: '手搖兌換券', cost: 80, icon: 'mug-hot', desc: '隨心挑選喜愛的飲料一杯' },
+        { name: '做蛋糕兌換券', cost: 500, icon: 'cake-candles', desc: '甜蜜手作蛋糕體驗券' },
+        { name: '到訪頭份兌換券', cost: 0, icon: 'location-dot', desc: '免費專屬頭份限定到訪專案' },
+        { name: '無條件不生氣券', cost: 1000, icon: 'heart-circle-check', desc: '可直接抵銷一次生氣狀況' }
+      ]
+    };
+
+    window.onload = function() {
+      updateGreeting();
+      renderState();
+      renderShop();
+      renderQuickRedeem();
+      renderHistory();
+    };
+
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      let greeting = 'GOOD NIGHT';
+      if (hour >= 5 && hour < 12) greeting = 'GOOD MORNING';
+      else if (hour >= 12 && hour < 18) greeting = 'GOOD AFTERNOON';
+      
+      document.getElementById('greetingTime').innerText = greeting;
+      document.getElementById('dashboardGreeting').innerText = greeting;
+    }
+
+    function unlockApp() {
+      const lock = document.getElementById('lockScreen');
+      const dash = document.getElementById('mainDashboard');
+      
+      lock.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        lock.classList.add('hidden');
+        dash.classList.remove('opacity-0', 'translate-y-4');
+      }, 500);
+    }
+
+    function lockApp() {
+      const lock = document.getElementById('lockScreen');
+      const dash = document.getElementById('mainDashboard');
+      
+      lock.classList.remove('hidden');
+      setTimeout(() => {
+        lock.classList.remove('opacity-0', 'scale-95');
+        dash.classList.add('opacity-0', 'translate-y-4');
+      }, 10);
+    }
+
+    function renderState() {
+      document.querySelectorAll('.userNameText').forEach(el => el.innerText = state.userName);
+      
+      const balanceEl = document.getElementById('balanceAmount');
+      if (state.isHideBalance) {
+        balanceEl.innerText = '••••••';
+      } else {
+        balanceEl.innerText = state.balance.toLocaleString();
+      }
+
+      document.getElementById('inputUserName').value = state.userName;
+      document.getElementById('inputBalance').value = state.balance;
+    }
+
+    function toggleBalanceVisibility() {
+      state.isHideBalance = !state.isHideBalance;
+      const eyeIcon = document.getElementById('eyeIcon');
+      if (state.isHideBalance) {
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+      renderState();
+    }
+
+    function switchTab(tabName) {
+      const views = ['mainDashboard', 'shopView', 'historyView', 'cardSettingsView'];
+      const tabs = ['home', 'shop', 'history', 'cardSettings'];
+
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('hidden');
+      });
+
+      tabs.forEach(t => {
+        const tabEl = document.getElementById('tab-' + t);
+        if (tabEl) {
+          tabEl.classList.remove('text-rosegold');
+          tabEl.classList.add('text-white/40');
+        }
+      });
+
+      const targetView = document.getElementById(tabName === 'home' ? 'mainDashboard' : tabName + 'View');
+      if (targetView) targetView.classList.remove('hidden');
+
+      const activeTab = document.getElementById('tab-' + tabName);
+      if (activeTab) {
+        activeTab.classList.remove('text-white/40');
+        activeTab.classList.add('text-rosegold');
+      }
+    }
+
+    function quickRedeem(title, cost, icon) {
+      if (state.balance < cost) {
+        showToast('餘額不足，快請另一半幫你儲值！');
+        return;
+      }
+
+      const confirmMsg = cost === 0 
+        ? `確定兌換「${title}」嗎？\n此項目為免費專屬體驗！` 
+        : `確定兌換「${title}」嗎？\n需扣除 NT$ ${cost}`;
+
+      if (confirm(confirmMsg)) {
+        state.balance -= cost;
+        state.history.unshift({
+          id: Date.now(),
+          title: title,
+          amount: -cost,
+          type: 'redeem',
+          date: new Date().toLocaleString('zh-TW', { hour12: false }).slice(0, 16)
+        });
+
+        renderState();
+        renderHistory();
+        showToast(`成功兌換「${title}」！`);
+      }
+    }
+
+    function renderQuickRedeem() {
+      const container = document.getElementById('quickRedeemContainer');
+      container.innerHTML = state.shopItems.map(item => `
+        <button onclick="quickRedeem('${item.name}', ${item.cost}, '${item.icon}')" class="flex flex-col items-center group active:scale-95 transition">
+          <div class="w-11 h-11 rounded-full bg-dark-surface gold-border flex items-center justify-center text-rosegold mb-1.5 group-hover:bg-rosegold group-hover:text-dark-bg transition-colors">
+            <i class="fa-solid fa-${item.icon} text-sm"></i>
+          </div>
+          <span class="text-[10px] text-white/70 leading-tight">${item.name}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderShop() {
+      const list = document.getElementById('shopItemList');
+      list.innerHTML = state.shopItems.map(item => `
+        <div class="bg-dark-card border border-white/5 rounded-2xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-full bg-dark-surface gold-border flex items-center justify-center text-rosegold">
+              <i class="fa-solid fa-${item.icon} text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-white">${item.name}</p>
+              <p class="text-[11px] text-white/50">${item.desc}</p>
+            </div>
+          </div>
+          <button onclick="quickRedeem('${item.name}', ${item.cost}, '${item.icon}')" class="px-3 py-1.5 bg-rosegold/10 text-rosegold border border-rosegold/30 rounded-xl text-xs font-medium hover:bg-rosegold hover:text-dark-bg transition">
+            ${item.cost === 0 ? '免費兌換' : '$' + item.cost}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      if (state.history.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 bg-dark-card/50 rounded-2xl border border-white/5">
+            <i class="fa-solid fa-receipt text-3xl text-white/10 mb-2"></i>
+            <p class="text-xs text-white/40">尚無任何交易紀錄</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = state.history.map(item => {
+        const isDeposit = item.amount > 0;
+        return `
+          <div class="bg-dark-card rounded-2xl p-3.5 flex items-center justify-between border border-white/5">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full ${isDeposit ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rosegold/10 text-rosegold border border-rosegold/20'} flex items-center justify-center text-xs">
+                <i class="fa-solid fa-${isDeposit ? 'arrow-down' : 'bag-shopping'}"></i>
+              </div>
+              <div>
+                <p class="text-xs font-medium text-white">${item.title}</p>
+                <p class="text-[10px] text-white/40">${item.date}</p>
+              </div>
+            </div>
+            <span class="font-outfit font-semibold text-xs ${isDeposit ? 'text-emerald-400' : 'text-white/80'}">
+              ${isDeposit ? '+' : ''}${item.amount.toLocaleString()}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openModal(modalType) {
+      document.getElementById('modalOverlay').classList.remove('hidden');
+      ['perks', 'deposit', 'profile'].forEach(m => {
+        const el = document.getElementById(m + 'Modal');
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById(modalType + 'Modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.add('hidden');
+    }
+
+    function confirmDeposit() {
+      const desc = document.getElementById('depositDesc').value.trim() || '貼心獎勵存款';
+      const amount = parseInt(document.getElementById('depositAmount').value);
+
+      if (!amount || amount <= 0) {
+        showToast('請輸入有效的金額！');
+        return;
+      }
+
+      state.balance += amount;
+      state.history.unshift({
+        id: Date.now(),
+        title: desc,
+        amount: amount,
+        type: 'deposit',
+        date: new Date().toLocaleString('zh-TW', { hour12: false }).slice(0, 16)
+      });
+
+      renderState();
+      renderHistory();
+      closeModal();
+      showToast(`已成功存入 NT$ ${amount}`);
+      
+      document.getElementById('depositDesc').value = '';
+      document.getElementById('depositAmount').value = '';
+    }
+
+    function saveCardSettings() {
+      const name = document.getElementById('inputUserName').value.trim();
+      const bal = parseInt(document.getElementById('inputBalance').value);
+
+      if (name) state.userName = name;
+      if (!isNaN(bal)) state.balance = bal;
+
+      renderState();
+      showToast('設定已成功更新！');
+      switchTab('home');
+    }
+
+    function toggleCardInfo() {
+      const numEl = document.getElementById('cardNumberDisplay');
+      if (numEl.innerText.includes('••••')) {
+        numEl.innerText = '1991 1011 1998 0520';
+      } else {
+        numEl.innerText = '•••• •••• •••• 0520';
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
